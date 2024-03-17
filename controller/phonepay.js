@@ -5,10 +5,7 @@ import mysql from 'mysql'
 const salt_key = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399"
 const merchant_id = "PGTESTPAYUAT"
 
-
-
 const newPayment = async (req, res) => {
-    // console.log(req.body)
     const { fullName, mobile, alternatemobile, amount, MUID, transactionId, fathersName, dateOfBirth, category, gender, addressLine1, state, city, pinCode, aadhaarNumber, familyAnnualIncome, email, educationalInstitute, course, courseLevel, yearOfStudy, passingYear, programName, courseName } = req.body;
     try {
         const data = {
@@ -16,9 +13,9 @@ const newPayment = async (req, res) => {
             merchantTransactionId: transactionId,
             merchantUserId: "MUID123",
             amount: req.body.amount * 100,
-            redirectUrl: `http://localhost:5000/status`,
+            redirectUrl: `https://aadwan-backend.onrender.com/status`,
             redirectMode: 'POST',
-            callbackUrl: `http://localhost:5000/status`,
+            callbackUrl: `https://aadwan-backend.onrender.com/status`,
             mobileNumber: req.body.number,
             paymentInstrument: {
                 type: 'PAY_PAGE'
@@ -110,7 +107,7 @@ const checkStatus = async (req, res) => {
 
     axios.request(options).then(async (response) => {
         if (response.data.success === true) {
-            const url = `http://localhost:5173/success`
+            const url = `https://aadwan.in/success`
             return res.redirect(url)
         } else {
             const db = mysql.createConnection({
@@ -136,7 +133,7 @@ const checkStatus = async (req, res) => {
             });
             db.end();
 
-            const url = `http://localhost:5173/failure`
+            const url = `https://aadwan.in/failure`
             return res.redirect(url)
         }
     }).catch((error) => {
