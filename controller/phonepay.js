@@ -2,8 +2,11 @@ import crypto from 'crypto'
 import axios from 'axios';
 import mysql from 'mysql'
 
-const salt_key = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399"
-const merchant_id = "PGTESTPAYUAT"
+// const salt_key = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399"
+// const merchant_id = "PGTESTPAYUAT"
+const salt_key = "eef22cac-2735-4eaa-8cf6-12462b16e3f0"
+const merchant_id = "M22CFI2HCDO3P"
+
 
 const newPayment = async (req, res) => {
     const { fullName, mobile, alternatemobile, amount, MUID, transactionId, fathersName, dateOfBirth, category, gender, addressLine1, state, city, pinCode, aadhaarNumber, familyAnnualIncome, email, educationalInstitute, course, courseLevel, yearOfStudy, passingYear, programName, courseName } = req.body;
@@ -28,8 +31,8 @@ const newPayment = async (req, res) => {
         const sha256 = crypto.createHash('sha256').update(string).digest('hex');
         const checksum = sha256 + '###' + keyIndex;
 
-        // const prod_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox"
-        const prod_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay"
+        // const prod_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay"
+        const prod_URL = "https://api.phonepe.com/apis/hermes/pg/v1/pay"
         const options = {
             method: 'POST',
             url: prod_URL,
@@ -91,8 +94,8 @@ const checkStatus = async (req, res) => {
     const string = `/pg/v1/status/${merchantId}/${merchantTransactionId}` + salt_key;
     const sha256 = crypto.createHash('sha256').update(string).digest('hex');
     const checksum = sha256 + "###" + keyIndex;
-    const URL = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status"
-    // const URL ='https://api.phonepe.com/apis/hermes/pg/v1/status' 
+    // const URL = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status"
+    const URL ='https://api.phonepe.com/apis/hermes/pg/v1/status' 
 
     const options = {
         method: 'GET',
@@ -107,7 +110,7 @@ const checkStatus = async (req, res) => {
 
     axios.request(options).then(async (response) => {
         if (response.data.success === true) {
-            const url = `https://aadwan.in/success`
+            const url = `https://aadwan.in`
             return res.redirect(url)
         } else {
             const db = mysql.createConnection({
@@ -133,7 +136,7 @@ const checkStatus = async (req, res) => {
             });
             db.end();
 
-            const url = `https://aadwan.in/failure`
+            const url = `https://aadwan.in`
             return res.redirect(url)
         }
     }).catch((error) => {
